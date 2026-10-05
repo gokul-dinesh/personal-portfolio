@@ -1,0 +1,48 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SocialLinks from '@/components/SocialLinks.astro';
+import ProjectGrid from '@/components/ProjectGrid.astro';
+import PostList from '@/components/PostList.astro';
+import { SITE } from '@/config';
+import { getPosts, getProjects, url } from '@/utils';
+
+const projects = (await getProjects()).filter((p) => p.data.featured).slice(0, 4);
+const posts = (await getPosts()).slice(0, 5);
+---
+<BaseLayout>
+  <section class="hero">
+    <p class="mono prompt"><span>$</span> whoami</p>
+    <h1>Hi, I'm {SITE.name}.</h1>
+    <p class="lead">
+      I'm a Master's student in Computing specialising in <strong>Artificial Intelligence</strong>.
+      I like building things that learn, tinkering with Linux until it breaks (and fixing it again),
+      and writing down what I figure out along the way.
+    </p>
+    {SITE.location && <p class="muted small mono">📍 {SITE.location}</p>}
+    <SocialLinks>
+      {SITE.hasCV && <a class="btn primary" href={url('cv.pdf')}>Download CV</a>}
+    </SocialLinks>
+  </section>
+
+  <section>
+    <h2>Featured projects</h2>
+    <ProjectGrid projects={projects} />
+    <p class="more"><a href={url('projects')}>All projects →</a></p>
+  </section>
+
+  <section>
+    <h2>Recent writing</h2>
+    <PostList posts={posts} />
+    <p class="more"><a href={url('blog')}>All posts →</a></p>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero { padding: 4rem 0 1rem; }
+  .prompt { color: var(--muted); margin: 0 0 .5rem; }
+  .prompt span { color: var(--accent); }
+  h1 { font-size: clamp(2rem, 6vw, 2.75rem); }
+  .lead { font-size: 1.1rem; color: var(--muted); max-width: 38rem; }
+  .lead strong { color: var(--fg); }
+  .more { margin-top: 1rem; font-size: .95rem; }
+</style>

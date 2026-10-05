@@ -1,0 +1,12 @@
+---
+// Used by plain Markdown pages in src/pages/ via `layout: '@/layouts/PageLayout.astro'`.
+import BaseLayout from './BaseLayout.astro';
+const { frontmatter } = Astro.props;
+---
+<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+  <header class="page-head">
+    <h1>{frontmatter.title}</h1>
+    {frontmatter.description && <p>{frontmatter.description}</p>}
+  </header>
+  <article class="prose"><slot /></article>
+</BaseLayout>

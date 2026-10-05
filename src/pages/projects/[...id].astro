@@ -1,0 +1,24 @@
+---
+import { render } from 'astro:content';
+import EntryLayout from '@/layouts/EntryLayout.astro';
+import Icon from '@/components/Icon.astro';
+import { getProjects } from '@/utils';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  // Only projects with a write-up (Markdown body) get their own page.
+  return projects.filter((p) => p.body?.trim()).map((p) => ({ params: { id: p.id }, props: { project: p } }));
+}
+const { project } = Astro.props;
+const { Content } = await render(project);
+const { title, description, date, tech, repo, demo, paper } = project.data;
+---
+<EntryLayout {title} {description} {date} tags={tech} back={{ href: 'projects', label: 'All projects' }}>
+  <div slot="actions" class="actions">
+    {repo && <a class="btn" href={repo}><Icon name="github" size={16} /> Code</a>}
+    {demo && <a class="btn" href={demo}><Icon name="external" size={16} /> Demo</a>}
+    {paper && <a class="btn" href={paper}><Icon name="file" size={16} /> Paper</a>}
+  </div>
+  <Content />
+</EntryLayout>
+<style>.actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; } .actions:empty { display: none; }</style>

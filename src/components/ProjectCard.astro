@@ -1,0 +1,30 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '@/utils';
+import Icon from './Icon.astro';
+interface Props { project: CollectionEntry<'projects'> }
+const { project } = Astro.props;
+const { title, description, tech, repo, demo, paper } = project.data;
+const hasBody = Boolean(project.body?.trim());
+---
+<article class="card">
+  <h3>{hasBody ? <a href={url(`projects/${project.id}/`)}>{title}</a> : title}</h3>
+  <p class="muted">{description}</p>
+  {tech.length > 0 && <ul class="tags">{tech.map((t) => <li class="tag">{t}</li>)}</ul>}
+  <div class="links small">
+    {repo && <a href={repo}><Icon name="github" size={14} /> Code</a>}
+    {demo && <a href={demo}><Icon name="external" size={14} /> Demo</a>}
+    {paper && <a href={paper}><Icon name="file" size={14} /> Paper</a>}
+  </div>
+</article>
+<style>
+  .card { border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1.2rem; background: var(--bg-soft); transition: border-color .15s; }
+  .card:hover { border-color: var(--accent); }
+  h3 { margin: 0 0 .35rem; }
+  h3 a { color: var(--fg); text-decoration: none; }
+  h3 a:hover { color: var(--accent); }
+  p { margin: 0; font-size: .95rem; }
+  .links { display: flex; gap: 1rem; margin-top: .75rem; }
+  .links:empty { display: none; }
+  .links a { display: inline-flex; align-items: center; gap: .3rem; }
+</style>

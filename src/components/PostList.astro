@@ -1,0 +1,23 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate, url } from '@/utils';
+interface Props { posts: CollectionEntry<'blog'>[] }
+const { posts } = Astro.props;
+---
+<ul class="posts">
+  {posts.map((p) => (
+    <li>
+      <time class="mono small muted" datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time>
+      <a href={url(`blog/${p.id}/`)}>{p.data.title}</a>
+      {p.data.draft && <span class="tag">draft</span>}
+    </li>
+  ))}
+</ul>
+{posts.length === 0 && <p class="muted">Nothing here yet.</p>}
+<style>
+  .posts { list-style: none; padding: 0; margin: 0; }
+  li { display: flex; gap: 1rem; align-items: baseline; padding: .45rem 0; flex-wrap: wrap; }
+  time { min-width: 7.5rem; }
+  li a { color: var(--fg); text-decoration: none; }
+  li a:hover { color: var(--accent); text-decoration: underline; }
+</style>
