@@ -29,6 +29,14 @@ const projects = defineCollection({
     paper: z.url().optional(),
     featured: z.boolean().default(false),
     draft: z.boolean().default(false),
+    // "in-progress" projects appear as redacted teasers in the "In the lab" section.
+    // Their title and body are never rendered until you switch status to "shipped".
+    status: z.enum(['shipped', 'in-progress']).default('shipped'),
+    codename: z.string().optional(),
+    hint: z.string().optional(),
+    log: z.array(z.string()).default([]),
+    progress: z.number().min(0).max(100).optional(),
+    eta: z.string().optional(),
   }),
 });
 

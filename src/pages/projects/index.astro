@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectGrid from '@/components/ProjectGrid.astro';
+import InTheLab from '@/components/InTheLab.astro';
 import { getProjects } from '@/utils';
 const projects = await getProjects();
 ---
@@ -10,4 +11,5 @@ const projects = await getProjects();
     <p>Things I've built, trained, broken and shipped.</p>
   </header>
   <ProjectGrid projects={projects} />
+  <InTheLab />
 </BaseLayout>
