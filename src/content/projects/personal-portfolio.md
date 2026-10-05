@@ -4,7 +4,7 @@ description: This website — a fast, static, Markdown-driven portfolio built wi
 date: 2026-10-05
 tech: [Astro, TypeScript, CSS, GitHub Actions]
 repo: https://github.com/gokul-dinesh/personal-portfolio
-featured: true
+featured: false
 ---
 
 This site is a static Astro build deployed to GitHub Pages on every push to `main`.

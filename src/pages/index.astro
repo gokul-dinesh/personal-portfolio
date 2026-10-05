@@ -13,12 +13,17 @@ const posts = (await getPosts()).slice(0, 5);
   <section class="hero">
     <p class="mono prompt"><span>$</span> whoami</p>
     <h1>Hi, I'm {SITE.name}.</h1>
+    <p class="mono small tagline">{SITE.tagline}</p>
     <p class="lead">
-      I'm a Master's student in Computing specialising in <strong>Artificial Intelligence</strong>.
-      I like building things that learn, tinkering with Linux until it breaks (and fixing it again),
-      and writing down what I figure out along the way.
+      I'm a software engineer who recently finished a Master of Computing in <strong>Artificial Intelligence</strong> at ANU.
+      I build full-stack products end to end, most recently <a href="https://bardar.online">Bardar</a>, a live
+      artist discovery platform, and <strong>PoliRec</strong>, an Android app with an integrated AI assistant.
+      I daily-drive Linux and like knowing how things work under the hood.
     </p>
-    {SITE.location && <p class="muted small mono">📍 {SITE.location}</p>}
+    <p class="meta small mono">
+      {SITE.openTo && <span class="badge"><span class="dot" aria-hidden="true"></span>{SITE.openTo}</span>}
+      {SITE.location && <span class="muted">📍 {SITE.location}</span>}
+    </p>
     <SocialLinks>
       {SITE.hasCV && <a class="btn primary" href={url('cv.pdf')}>Download CV</a>}
     </SocialLinks>
@@ -44,5 +49,9 @@ const posts = (await getPosts()).slice(0, 5);
   h1 { font-size: clamp(2rem, 6vw, 2.75rem); }
   .lead { font-size: 1.1rem; color: var(--muted); max-width: 38rem; }
   .lead strong { color: var(--fg); }
+  .tagline { color: var(--accent); margin: 0 0 1rem; }
+  .meta { display: flex; flex-wrap: wrap; gap: .5rem 1rem; align-items: center; }
+  .badge { display: inline-flex; align-items: center; gap: .45rem; padding: .3rem .65rem; border-radius: 999px; background: var(--accent-soft); color: var(--accent); }
+  .dot { flex-shrink: 0; width: .5rem; height: .5rem; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .more { margin-top: 1rem; font-size: .95rem; }
 </style>
