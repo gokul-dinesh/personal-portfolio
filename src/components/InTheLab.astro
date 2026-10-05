@@ -1,0 +1,22 @@
+---
+// "In the lab" teaser section. Renders nothing if there are no in-progress projects.
+import UpcomingCard from './UpcomingCard.astro';
+import { getUpcoming, url } from '@/utils';
+const upcoming = await getUpcoming();
+---
+{upcoming.length > 0 && (
+  <section class="in-the-lab" id="lab">
+    <h2><span class="mono">~/lab</span> In the lab</h2>
+    <p class="muted intro">Things I'm building right now. Details stay under wraps until they ship.</p>
+    <div class="grid">{upcoming.map((p, i) => <UpcomingCard project={p} index={i} />)}</div>
+    <p class="small muted notify">
+      Want to see them first? Follow on <a href="https://github.com/gokul-dinesh">GitHub</a> or subscribe via <a href={url('rss.xml')}>RSS</a>.
+    </p>
+  </section>
+)}
+<style>
+  h2 .mono { color: var(--accent); font-size: .85em; margin-right: .35rem; }
+  .intro { margin-top: -.5rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr)); gap: 1rem; }
+  .notify { margin-top: 1rem; }
+</style>

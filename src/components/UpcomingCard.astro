@@ -1,0 +1,83 @@
+---
+// A redacted teaser card for an in-progress project.
+// Deliberately renders NOTHING from `title`, `tech`, links or the body, so nothing leaks into the HTML.
+import type { CollectionEntry } from 'astro:content';
+interface Props { project: CollectionEntry<'projects'>; index?: number }
+const { project, index = 0 } = Astro.props;
+const { codename, hint, log, progress, eta } = project.data;
+const name = codename ?? `PROJECT_${String(index + 1).padStart(2, '0')}`;
+---
+<article class="lab" aria-label={`Upcoming project ${name}`}>
+  <header>
+    <span class="stamp mono">classified</span>
+    <span class="status mono small"><span class="pulse" aria-hidden="true"></span>in progress</span>
+  </header>
+
+  <p class="codename mono">{name}</p>
+  <p class="redacted" aria-hidden="true"><span style="width: 62%"></span><span style="width: 28%"></span></p>
+  {hint && <p class="hint">{hint}</p>}
+
+  {log.length > 0 && (
+    <pre class="log mono" aria-label="Build log"><span class="cmd">$ tail -f build.log</span>{log.map((line, i) => (
+      <span class="line" style={`--i: ${i}`}>{'\n'}&gt; {line}</span>
+    ))}<span class="line caret" style={`--i: ${log.length}`}>{'\n'}&gt; <b>█</b></span></pre>
+  )}
+
+  {progress !== undefined && (
+    <div class="progress">
+      <div class="bar" role="progressbar" aria-valuenow={progress} aria-valuemin="0" aria-valuemax="100" aria-label="Progress">
+        <span style={`--p: ${progress}%`}></span>
+      </div>
+      <span class="mono small">{progress}%</span>
+    </div>
+  )}
+  <p class="eta mono small">ETA: {eta ?? 'soon™'}</p>
+</article>
+
+<style>
+  .lab {
+    position: relative; overflow: hidden;
+    border: 1px dashed var(--accent); border-radius: var(--radius);
+    padding: 1.1rem 1.2rem;
+    background:
+      repeating-linear-gradient(-45deg, transparent 0 14px, var(--accent-soft) 14px 15px),
+      var(--bg-soft);
+  }
+  header { display: flex; justify-content: space-between; align-items: center; gap: .5rem; }
+  .stamp {
+    font-size: .7rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase;
+    color: #d64545; border: 2px solid currentColor; border-radius: 4px; padding: .1rem .45rem;
+    transform: rotate(-4deg); opacity: .85;
+  }
+  .status { display: inline-flex; align-items: center; gap: .4rem; color: var(--muted); }
+  .pulse { width: .5rem; height: .5rem; border-radius: 50%; background: #e0a800; animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 5px #e0a80033; opacity: .6; } }
+
+  .codename { font-size: 1.15rem; font-weight: 700; margin: .9rem 0 .4rem; color: var(--fg); }
+  .redacted { display: flex; gap: .4rem; margin: 0 0 .75rem; }
+  .redacted span {
+    height: .85rem; border-radius: 2px; background: var(--fg); opacity: .85;
+    background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--bg) 35%, transparent), transparent);
+    background-size: 200% 100%; animation: shimmer 2.4s linear infinite;
+  }
+  @keyframes shimmer { from { background-position: 200% 0; } to { background-position: -200% 0; } }
+  .hint { margin: 0 0 .75rem; color: var(--muted); font-size: .95rem; }
+
+  .log { margin: 0 0 .9rem; padding: .7rem .8rem; font-size: .78rem; line-height: 1.6; background: var(--bg); white-space: pre-wrap; }
+  .cmd { color: var(--accent); }
+  .line { opacity: 0; animation: appear .01s calc(.6s + var(--i) * .9s) forwards; }
+  @keyframes appear { to { opacity: 1; } }
+  .caret b { font-weight: 400; color: var(--accent); animation: blink 1.1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  .progress { display: flex; align-items: center; gap: .6rem; }
+  .bar { flex: 1; height: .45rem; border-radius: 999px; background: var(--border); overflow: hidden; }
+  .bar span { display: block; height: 100%; width: var(--p); background: var(--accent); border-radius: inherit; animation: fill 1.4s ease-out; }
+  @keyframes fill { from { width: 0; } }
+  .eta { margin: .5rem 0 0; color: var(--muted); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pulse, .redacted span, .caret b, .bar span { animation: none; }
+    .line { animation: none; opacity: 1; }
+  }
+</style>

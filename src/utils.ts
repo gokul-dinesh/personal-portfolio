@@ -22,10 +22,17 @@ export async function getPosts() {
   return posts.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
 }
 
-/** Projects: featured first, then by date. */
+const visible = ({ data }: { data: { draft: boolean } }) => import.meta.env.DEV || !data.draft;
+
+/** Shipped projects: featured first, then by date. */
 export async function getProjects() {
-  const projects = await getCollection('projects', ({ data }) => import.meta.env.DEV || !data.draft);
+  const projects = await getCollection('projects', (p) => visible(p) && p.data.status === 'shipped');
   return projects.sort(
     (a, b) => Number(b.data.featured) - Number(a.data.featured) || b.data.date.valueOf() - a.data.date.valueOf(),
   );
+}
+
+/** In-progress projects, shown as redacted teasers. */
+export async function getUpcoming() {
+  return getCollection('projects', (p) => visible(p) && p.data.status === 'in-progress');
 }
