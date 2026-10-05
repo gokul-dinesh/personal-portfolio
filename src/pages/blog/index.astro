@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PostList from '@/components/PostList.astro';
+import { getPosts, url } from '@/utils';
+const posts = await getPosts();
+const tags = [...new Set(posts.flatMap((p) => p.data.tags))].sort();
+---
+<BaseLayout title="Blog" description="Notes, opinions and write-ups on AI, Linux and whatever I'm into.">
+  <header class="page-head">
+    <h1>Blog</h1>
+    <p>Notes, opinions and write-ups. Subscribe via <a href={url('rss.xml')}>RSS</a>.</p>
+  </header>
+  {tags.length > 0 && (
+    <ul class="tags filter">{tags.map((t) => <li><a class="tag" href={url(`blog/tags/${t}/`)}>#{t}</a></li>)}</ul>
+  )}
+  <PostList posts={posts} />
+</BaseLayout>
+<style>.filter { margin-bottom: 1.5rem; } .filter a { text-decoration: none; display: inline-block; }</style>

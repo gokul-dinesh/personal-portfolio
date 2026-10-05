@@ -1,0 +1,12 @@
+---
+import { SOCIALS } from '@/config';
+import { url } from '@/utils';
+import Icon from './Icon.astro';
+---
+<div class="links">
+  {SOCIALS.filter((s) => s.icon !== 'rss').map((s) => (
+    <a class="btn" href={url(s.href)} rel="me"><Icon name={s.icon} size={16} />{s.label}</a>
+  ))}
+  <slot />
+</div>
+<style>.links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1.25rem; }</style>

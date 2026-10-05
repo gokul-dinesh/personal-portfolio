@@ -1,0 +1,20 @@
+---
+import { SITE, SOCIALS } from '@/config';
+import { url } from '@/utils';
+import Icon from './Icon.astro';
+---
+<footer class="container">
+  <ul class="socials">
+    {SOCIALS.map((s) => (
+      <li><a href={url(s.href)} aria-label={s.label} title={s.label} rel="me"><Icon name={s.icon} /></a></li>
+    ))}
+  </ul>
+  <p class="muted small">© {new Date().getFullYear()} {SITE.name} · Built with <a href="https://astro.build">Astro</a> · <a href="https://github.com/gokul-dinesh/personal-portfolio">Source</a></p>
+</footer>
+
+<style>
+  footer { padding: 3rem 1rem 2rem; text-align: center; border-top: 1px solid var(--border); margin-top: 4rem; }
+  .socials { display: flex; justify-content: center; gap: 1rem; list-style: none; padding: 0; margin: 0 0 .5rem; }
+  .socials a { color: var(--muted); }
+  .socials a:hover { color: var(--accent); }
+</style>

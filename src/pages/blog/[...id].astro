@@ -1,0 +1,15 @@
+---
+import { render } from 'astro:content';
+import EntryLayout from '@/layouts/EntryLayout.astro';
+import { getPosts, readingTime } from '@/utils';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+<EntryLayout {...post.data} meta={readingTime(post.body)} back={{ href: 'blog', label: 'All posts' }}>
+  <Content />
+</EntryLayout>

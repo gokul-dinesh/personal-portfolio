@@ -1,0 +1,13 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectGrid from '@/components/ProjectGrid.astro';
+import { getProjects } from '@/utils';
+const projects = await getProjects();
+---
+<BaseLayout title="Projects" description="Things I've built, trained, broken and shipped.">
+  <header class="page-head">
+    <h1>Projects</h1>
+    <p>Things I've built, trained, broken and shipped.</p>
+  </header>
+  <ProjectGrid projects={projects} />
+</BaseLayout>
